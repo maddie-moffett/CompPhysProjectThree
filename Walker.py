@@ -165,19 +165,19 @@ def FindingN():
 
 def MeanSquaredRforN():
     Nvals = [i for i in range(1, 26, 1)] # N values to be tested
-    meanr2s = []
+    meanr2s = []                         # storage list for the mean squared rs
 
-    for N in Nvals:
-        sumi = 0
-        tot = 0
-        _, ws = SAW(N = N, numwalkers = 1000, sidelength = 2000)
-        for w in ws:
-            if w.num_steps() >= N:
-                sumi += w.get_r2()
-                tot += 1
-        meanr2s.append(sumi/tot)
+    for N in Nvals:                      # iterate through the nvals
+        sumi = 0                         # sum starts at 0
+        tot = 0                          # number of successful ws start at 0
+        _, ws = SAW(N = N, numwalkers = 1000, sidelength = 2000) # collect the walker objects
+        for w in ws:                     # iterate through walker objects
+            if w.num_steps() >= N:       # if the walker object was successful
+                sumi += w.get_r2()       # increment sum w this r squared val
+                tot += 1                 # increment the total number of successful
+        meanr2s.append(sumi/tot)         # append this mean to this running list
     
-    pylab.plot(Nvals, meanr2s)
+    pylab.plot(Nvals, meanr2s)           # plot label and show
     pylab.title("Mean Squared R as a function of N")
     pylab.xlabel("N value")
     pylab.ylabel("Mean Squared R")
