@@ -152,7 +152,7 @@ def FindingN():
     successrate = []
 
     for N in Nvals:                      # iterate through n vals to calculate the srate
-        srate, _ = SAW(N = N, numwalkers = 1000, sidelength = 1000)
+        srate, _ = SAW(N = N, numwalkers = 1000, sidelength = 2000)
         successrate.append(srate)        # record
     
     pylab.plot(Nvals, successrate)       # plot
@@ -163,7 +163,26 @@ def FindingN():
     pylab.legend()
     pylab.show()
 
+def MeanSquaredRforN():
+    Nvals = [i for i in range(1, 26, 1)] # N values to be tested
+    meanr2s = []
+
+    for N in Nvals:
+        sumi = 0
+        tot = 0
+        _, ws = SAW(N = N, numwalkers = 1000, sidelength = 2000)
+        for w in ws:
+            if w.num_steps() >= N:
+                sumi += w.get_r2()
+                tot += 1
+        meanr2s.append(sumi/tot)
+    
+    pylab.plot(Nvals, meanr2s)
+    pylab.title("Mean Squared R as a function of N")
+    pylab.xlabel("N value")
+    pylab.ylabel("Mean Squared R")
+    pylab.show()
 
 
 if __name__ == "__main__":
-    FindingN()
+    MeanSquaredRforN()
