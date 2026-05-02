@@ -27,7 +27,7 @@ West = Facing(3)  # generate the West facing object
 
 class Walker:
     
-    def __init__(self, sidelength = 100):
+    def __init__(self, sidelength):
         self.xhist = [0]                                 # history of x values
         self.yhist = [0]                                 # history of y values
         self._x = 0                                      # current x position (in a graphing sense)
@@ -47,7 +47,7 @@ class Walker:
         g[self._gridx][self._gridy] = True                    # current occupied position has been occupied
         return g                                              # return the grid 
     
-    def update(self):
+    def update(self, move):
         self.xhist.append(self._x)                  # append current x val to the history list
         self.yhist.append(self._y)                  # append current y val to the history list
         self._grid[self._gridx][self._gridy] = True # current position in grid is occupied
@@ -118,11 +118,26 @@ class Walker:
             relativemove = ["left", "up", "right"][rval]        # convert to the move relative to the walker's facing
             objectivemove = self._facing.convert_movement(rval) # convert the relative move to an objective move through the plot
             if self.check(objectivemove):                       # if have visited the proposed spot before, terminate
-                self.terminate()
+                return False
             else:                                               # else take the step
                 self._move(objectivemove)                       # move location
                 self._spin(relativemove)                        # change direction facing
+                return True
 
 
-    def terminate(self):
-        return Walker()
+def SAW(N = 100, numwalkers = 1000, sidelength = 1000):
+    wpositions = []        # array to store the x and y positons of each walker to model
+    success = 0            # record number of successful walks
+    fail = 0               # record number of failed walks
+
+    for i in range(numwalkers):                # iterate through number of walkers
+        wpositions.append([])                  # new array in positions to store the x and y arrays for this walker
+        w = Walker(sidelength)                 # initialize walker
+        walking = w.step()                     # take the initial step upwards
+        while w.num_steps <= N and walking:    # while not desired N and don't double back
+            walking = w.step()                 # attempt a step
+        wpositions[i].append(w.xhist, w.yhist) # append the x and y histories
+        if w.num_steps == N:                   # if we reached the number of N desired, increment successes
+            success += 1
+        else:                                  # else increment failures
+            fail += 1
