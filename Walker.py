@@ -1,4 +1,5 @@
 from random import random
+import pylab
 
 class Facing:
         def __init__(self, num):
@@ -141,3 +142,20 @@ def SAW(N = 100, numwalkers = 1000, sidelength = 1000):
             success += 1
         else:                                  # else increment failures
             fail += 1
+    
+    successrate = success / (success + fail)
+    return successrate, wpositions
+
+def FindingN():
+    Nvals = [i for i in range(1, 505, 5)]
+    successrate = []
+
+    for N in Nvals:
+        srate, wpos = SAW(N = N, numwalkers = 100, sidelength = 500)
+        successrate.append(srate)
+    
+    pylab.plot(Nvals, successrate)
+    pylab.title("Successrate as a function of N")
+    pylab.xlabel("N value")
+    pylab.ylabel("Success Rate")
+    pylab.show()
