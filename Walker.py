@@ -133,7 +133,7 @@ def SAW(N = 25, numwalkers = 1000, sidelength = 1000):
     success = 0            # record number of successful walks
     fail = 0               # record number of failed walks
 
-    for i in range(numwalkers):                  # iterate through number of walkers
+    for _ in range(numwalkers):                  # iterate through number of walkers
         w = Walker(sidelength)                   # initialize walker
         walking = w.step()                       # take the initial step upwards
         while w.num_steps() <= N and walking:    # while not desired N and don't double back
@@ -145,7 +145,7 @@ def SAW(N = 25, numwalkers = 1000, sidelength = 1000):
             fail += 1
     
     successrate = success / (success + fail)     # calculate success rate
-    return successrate, walkers                  # return success rate and positions
+    return successrate, walkers                  # return success rate and walker objects
 
 def FindingN():
     Nvals = [i for i in range(1, 55, 5)] # N values to be tested
@@ -175,7 +175,6 @@ def MeanSquaredRforN():
             if w.num_steps() >= N:       # if the walker object was successful
                 sumi += w.get_r2()       # increment sum w this r squared val
                 tot += 1                 # increment the total number of successful
-            print("tot: " + str(tot) + " N = " + str(N))
         meanr2s.append(sumi/tot)         # append this mean to this running list
     
     pylab.plot(Nvals, meanr2s)           # plot label and show

@@ -44,6 +44,8 @@ class Walker:
         self._movelist = ["up", "down", "left", "right"] # order of movements
         self._spinlist = [West, North, East, South]      # order of ways to face
 
+        self._weight = 1                                # array of the weights at each step
+
     def _make_grid(self, sidelength):
         g = [[False for _ in range(sidelength)] for _ in range(sidelength)] # make 2D grid full of False (has not been there) with sidelengths provided
         g[self._gridx][self._gridy] = True                                  # current occupied position has been occupied
@@ -110,16 +112,24 @@ class Walker:
             self._spinlist = [South, West, North, East]
     
     def _availablesteps(self):
-        for possi in 
+        avimoves = []                  # available
+        for possi in self._movelist:
+            if self.check(possi):
+                avimoves.append(possi)
+        weight = ((len(possi)) / 3)
+        self._weight*weight
+        return weight, avimoves
     
     def step(self):
         if self._last is None:
             self._move("up")
             return True
         else:
-            rval = int((random() * 3) // 1) + 1                 # generate random integer 1, 2, or 3
-            relativemove = ["left", "up", "right"][rval]        # convert to the move relative to the walker's facing
-            objectivemove = self._facing.convert_movement(rval) # convert the relative move to an objective move through the plot
+            weight, avimoves = self._availablesteps()           # weighted adjustment
+            rval = int((random() * len(avimoves)) // 1)         # generate random integer 1, 2, or 3
+            relativemove = avimoves[rval*weight]                # find the relative move
+            nval = ["left", "up", "right"][rval].index(relativemove) # find the index of the relative move
+            objectivemove = self._facing.convert_movement(nval) # convert the relative move to an objective move through the plot
             if self.check(objectivemove):                       # if have visited the proposed spot before, terminate
                 return False
             else:                                               # else take the step
@@ -127,14 +137,20 @@ class Walker:
                 self._spin(rval)                                # change direction facing
                 return True
     
-    def get_r2(self):
+    def _r2(self):
         return (self._x**2 + self._y**2)
+    
+    def get_r2_numer(self):
+        return self._weight*self._r2()
+    
+    def get_weight(self):
+        return self._weight
 
 
 def SAW(N = 25, numwalkers = 1000, sidelength = 1000):
     walkers = []           # array to store the walker objects
-    success = 0            # record number of successful walks
-    fail = 0               # record number of failed walks
+    numer = 0              # record numerator sum
+    denomer = 0            # record denominator sum
 
     for i in range(numwalkers):                  # iterate through number of walkers
         w = Walker(sidelength)                   # initialize walker
@@ -142,46 +158,11 @@ def SAW(N = 25, numwalkers = 1000, sidelength = 1000):
         while w.num_steps() <= N and walking:    # while not desired N and don't double back
             walking = w.step()                   # attempt a step
         walkers.append(w)                        # append the current walker object
-        if w.num_steps() >= N:                   # if we reached the number of N desired, increment successes
-            success += 1
-        else:                                    # else increment failures
-            fail += 1
+        numer += w.get_r2_numer()                # sum up the numerator weight and r^2
+        denomer += w.get_weight()                # sum up the weights for the denominator
     
-    successrate = success / (success + fail)     # calculate success rate
-    return successrate, walkers                  # return success rate and positions
+    meansquaredr = numer/denomer                 # calculate mean squared r
+    return meansquaredr, walkers                 # return meansquared r and walker objects
 
-def FindingN():
-    Nvals = [i for i in range(1, 55, 5)] # N values to be tested
-    successrate = []
-
-    for N in Nvals:                      # iterate through n vals to calculate the srate
-        srate, _ = SAW(N = N, numwalkers = 1000, sidelength = 2000)
-        successrate.append(srate)        # record
-    
-    pylab.plot(Nvals, successrate)       # plot
-    pylab.plot([0,50], [.1, .1], "-k", label = "10% Success Rate")
-    pylab.title("Success Rate as a Function of N")
-    pylab.xlabel("N value")
-    pylab.ylabel("Success Rate")
-    pylab.legend()
-    pylab.show()
-
-def MeanSquaredRforN():
-    Nvals = [i for i in range(1, 26, 1)] # N values to be tested
-    meanr2s = []                         # storage list for the mean squared rs
-
-    for N in Nvals:                      # iterate through the nvals
-        sumi = 0                         # sum starts at 0
-        tot = 0                          # number of successful ws start at 0
-        _, ws = SAW(N = N, numwalkers = 1000, sidelength = 2000) # collect the walker objects
-        for w in ws:                     # iterate through walker objects
-            if w.num_steps() >= N:       # if the walker object was successful
-                sumi += w.get_r2()       # increment sum w this r squared val
-                tot += 1                 # increment the total number of successful
-        meanr2s.append(sumi/tot)         # append this mean to this running list
-    
-    pylab.plot(Nvals, meanr2s)           # plot label and show
-    pylab.title("Mean Squared R as a function of N")
-    pylab.xlabel("N value")
-    pylab.ylabel("Mean Squared R")
-    pylab.show()
+def FindWeightedMeanR2():
+    Nvals = [4, 8, 16, 32]
