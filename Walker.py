@@ -44,9 +44,9 @@ class Walker:
         self._spinlist = [West, North, East, South]      # order of ways to face
 
     def _make_grid(self, sidelength):
-        g = [li for li in [False for _ in range(sidelength)]] # make 2D grid full of False (has not been there) with sidelengths provided
-        g[self._gridx][self._gridy] = True                    # current occupied position has been occupied
-        return g                                              # return the grid 
+        g = [[False for _ in range(sidelength)] for _ in range(sidelength)] # make 2D grid full of False (has not been there) with sidelengths provided
+        g[self._gridx][self._gridy] = True                                  # current occupied position has been occupied
+        return g                                                            # return the grid 
     
     def update(self, move):
         self.xhist.append(self._x)                  # append current x val to the history list
@@ -81,24 +81,24 @@ class Walker:
             self._last = "right"
     
     def _up(self):
-        self._y += 1     # move up a y position in graph
-        self._gridy += 1 # move up a y position in GRID
-        self.update()    # update the histories
+        self._y += 1         # move up a y position in graph
+        self._gridy += 1     # move up a y position in GRID
+        self.update("up")    # update the histories
     
     def _down(self):
-        self._y -= 1     # move down a y position in graph
-        self._gridy -= 1 # move down a y position in GRID
-        self.update()    # update the histories
+        self._y -= 1         # move down a y position in graph
+        self._gridy -= 1     # move down a y position in GRID
+        self.update("down")  # update the histories
     
     def _left(self):
-        self._x -= 1     # move down an x position in graph
-        self._gridx -= 1 # move down an x position in GRID
-        self.update()    # update the histories
+        self._x -= 1         # move down an x position in graph
+        self._gridx -= 1     # move down an x position in GRID
+        self.update("left")  # update the histories
     
     def _right(self):
-        self._x += 1     # move up an x position in graph
-        self._gridx += 1 # move up an x position in GRID
-        self.update()    # update the histories
+        self._x += 1         # move up an x position in graph
+        self._gridx += 1     # move up an x position in GRID
+        self.update("right") # update the histories
     
     def _spin(self, relativemove):
         self._facing = self._spinlist[relativemove]     # spin to face the new direction depending on facing and relative movement
@@ -113,7 +113,7 @@ class Walker:
     
     def step(self):
         if self._last is None:
-            self.up()
+            self._up()
         else:
             rval = int(round((random() * 2) + 1))               # generate random integer 1, 2, or 3
             relativemove = ["left", "up", "right"][rval]        # convert to the move relative to the walker's facing
@@ -131,16 +131,16 @@ def SAW(N = 100, numwalkers = 1000, sidelength = 1000):
     success = 0            # record number of successful walks
     fail = 0               # record number of failed walks
 
-    for i in range(numwalkers):                # iterate through number of walkers
-        wpositions.append([])                  # new array in positions to store the x and y arrays for this walker
-        w = Walker(sidelength)                 # initialize walker
-        walking = w.step()                     # take the initial step upwards
-        while w.num_steps <= N and walking:    # while not desired N and don't double back
-            walking = w.step()                 # attempt a step
-        wpositions[i].append(w.xhist, w.yhist) # append the x and y histories
-        if w.num_steps == N:                   # if we reached the number of N desired, increment successes
+    for i in range(numwalkers):                  # iterate through number of walkers
+        wpositions.append([])                    # new array in positions to store the x and y arrays for this walker
+        w = Walker(sidelength)                   # initialize walker
+        walking = w.step()                       # take the initial step upwards
+        while w.num_steps() <= N and walking:    # while not desired N and don't double back
+            walking = w.step()                   # attempt a step
+        wpositions[i].append([w.xhist, w.yhist]) # append the x and y histories
+        if w.num_steps == N:                     # if we reached the number of N desired, increment successes
             success += 1
-        else:                                  # else increment failures
+        else:                                    # else increment failures
             fail += 1
     
     successrate = success / (success + fail)
@@ -159,3 +159,7 @@ def FindingN():
     pylab.xlabel("N value")
     pylab.ylabel("Success Rate")
     pylab.show()
+
+
+if __name__ == "__main__":
+    FindingN()
