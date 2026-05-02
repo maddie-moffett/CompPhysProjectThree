@@ -9,13 +9,13 @@ class Facing:
         
         def _movelist(self):                                  # assign the objective direction of movement based on relative movement and facing direc
             if self.cardinal == "North":
-                self._moves = ["left", "up", "right", "down"]
+                self._movelist = ["left", "up", "right", "down"]
             elif self.cardinal == "South":
-                self._moves ["right", "down", "left", "up"]
+                self._movelist = ["right", "down", "left", "up"]
             elif self.cardinal == "East":
-                self._moves = ["up", "right", "down", "left"]
+                self._movelist = ["up", "right", "down", "left"]
             elif self.cardinal == "West":
-                self._moves = ["down", "left", "up", "right"]
+                self._movelist = ["down", "left", "up", "right"]
 
         def convert_movement(self, move_num):                 # convert the relative movement given to objective and return
             return self._movelist[move_num]
