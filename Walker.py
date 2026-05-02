@@ -1,4 +1,5 @@
 from random import random
+from numpy import mean
 import pylab
 
 class Facing:
@@ -122,6 +123,9 @@ class Walker:
                 self._move(objectivemove)                       # move location
                 self._spin(rval)                                # change direction facing
                 return True
+    
+    def get_r2(self):
+        return (self._x**2 + self._y**2)
 
 
 def SAW(N = 100, numwalkers = 1000, sidelength = 1000):
@@ -153,12 +157,13 @@ def FindingN():
         successrate.append(srate)
     
     pylab.plot(Nvals, successrate)
-    pylab.plot([0,50], [.05, .05], "-k", label = "5% Success Rate")
-    pylab.title("Success Rate as a function of N")
+    pylab.plot([0,50], [.1, .1], "-k", label = "10% Success Rate")
+    pylab.title("Success Rate as a Function of N")
     pylab.xlabel("N value")
     pylab.ylabel("Success Rate")
     pylab.legend()
     pylab.show()
+
 
 
 if __name__ == "__main__":
