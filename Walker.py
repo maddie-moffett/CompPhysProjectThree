@@ -2,11 +2,11 @@ from random import random
 
 class Facing:
         def __init__(self, num):
-            self._facingops = ["North", "South", "East", "West"]
-            self.cardinal = self._facingops[num]
-            self._movelist()
+            facingops = ["North", "South", "East", "West"]    # options for the facing directions
+            self.cardinal = facingops[num]                    # the cardinal direction of this facing based on index provided
+            self._movelist()                                  # generate the moves list
         
-        def _movelist(self):
+        def _movelist(self):                                  # assign the objective direction of movement based on relative movement and facing direc
             if self.cardinal == "North":
                 self._moves = ["left", "up", "right", "down"]
             elif self.cardinal == "South":
@@ -16,17 +16,14 @@ class Facing:
             elif self.cardinal == "West":
                 self._moves = ["down", "left", "up", "right"]
 
-        def convert_movement(self, move_num):
+        def convert_movement(self, move_num):                 # convert the relative movement given to objective and return
             return self._movelist[move_num]
-        
-        def __str__(self):
-            return self.cardinal
 
 
-North = Facing(0)
-South = Facing(1)
-East = Facing(2)
-West = Facing(3)
+North = Facing(0) # generate the North facing object
+South = Facing(1) # generate the South facing object
+East = Facing(2)  # generate the East facing object
+West = Facing(3)  # generate the West facing object
 
 class Walker:
     
@@ -103,10 +100,10 @@ class Walker:
         self.update()    # update the histories
     
     def _spin(self, relativemove):
-        self._facing = self._spinlist[relativemove]
+        self._facing = self._spinlist[relativemove]     # spin to face the new direction depending on facing and relative movement
         if self._facing == North:
-            self._spinlist = [West, North, East, South]
-        elif self._facing == South:
+            self._spinlist = [West, North, East, South] # also update the spinlist for new facing direction correlating relative move
+        elif self._facing == South:                     # to what the new facing would be
             self._spinlist = [East, South, West, North]
         elif self._facing == East:
             self._spinlist = [North, East, South, West]
