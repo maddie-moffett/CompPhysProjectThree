@@ -10,10 +10,15 @@ Start with an initial step upwards. Generate a random number 1, 2, or 3 correspo
 What is the maximum value of N you can reasonably consider? For the values of N that you can reasonably consider, calculate the mean square end-to-end distance, R^2(N) and plot it as a function of N.
 ### (c) Modify your program to add a weighting procedure.
 Weighting procedure developed by Rosenbluth and Rosenbluth that does not throw out as many walks. Before the Nth step the three possible grid points the walker can step to are summed and the total is sN which can be 0, 1, 2, or 3, corresponding to all three steps allowed, two of the three steps allowed, only one of the three steps allowed, and no allowed steps.
+
 sn = 0 → W (N) = W (N − 1)
+
 sn = 1 → W (N) = 2/3 W (N − 1) Take one of the two possible steps.
+
 sn = 2 → W (N) = 1/3 W (N − 1) Take the one possible step.
+
 sn = 3 → W (N) = 0 Terminate the walk. (1)
+
 Calculate the weighted mean of R^2(N) where the sum is over all of the trials. Calculate R^2(N) = N^(2v) (a power law fit) and find your estimate for v.
 R^2(N) = sum(Wi(N)Ri^2(N)) / sum(Wi(N))
 ### (d) Make a movie of your results
