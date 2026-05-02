@@ -147,7 +147,7 @@ class Walker:
         return self._weight
 
 
-def SAW(N = 25, numwalkers = 1000, sidelength = 1000):
+def SAW(N = 25, numwalkers = 1000, sidelength = 50):
     walkers = []           # array to store the walker objects
     numer = 0              # record numerator sum
     denomer = 0            # record denominator sum
