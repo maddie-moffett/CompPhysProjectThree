@@ -5,9 +5,9 @@ class Facing:
         def __init__(self, num):
             facingops = ["North", "South", "East", "West"]    # options for the facing directions
             self.cardinal = facingops[num]                    # the cardinal direction of this facing based on index provided
-            self._movelist()                                  # generate the moves list
+            self._makemovelist()                              # generate the moves list
         
-        def _movelist(self):                                  # assign the objective direction of movement based on relative movement and facing direc
+        def _makemovelist(self):                               # assign the objective direction of movement based on relative movement and facing direc
             if self.cardinal == "North":
                 self._movelist = ["left", "up", "right", "down"]
             elif self.cardinal == "South":
@@ -67,18 +67,15 @@ class Walker:
             return self._grid[self._gridx + 1][self._gridy]
     
     def _move(self, objectivemove):     # helper function to ensure call of correct movement
+        self._last = objectivemove      # and update last movement
         if objectivemove == "up":
             self._up()
-            self._last = "up"
         elif objectivemove == "down":
             self._down()
-            self._last = "down"
         elif objectivemove == "left":
             self._left()
-            self._last = "left"
         elif objectivemove == "right":
             self._right()
-            self._last = "right"
     
     def _up(self):
         self._y += 1         # move up a y position in graph
@@ -113,7 +110,8 @@ class Walker:
     
     def step(self):
         if self._last is None:
-            self._up()
+            self._move("up")
+            return True
         else:
             rval = int((random() * 3) // 1)                     # generate random integer 0, 1, or 2
             relativemove = ["left", "up", "right"][rval]        # convert to the move relative to the walker's facing
@@ -122,7 +120,7 @@ class Walker:
                 return False
             else:                                               # else take the step
                 self._move(objectivemove)                       # move location
-                self._spin(relativemove)                        # change direction facing
+                self._spin(rval)                                # change direction facing
                 return True
 
 
@@ -138,7 +136,7 @@ def SAW(N = 100, numwalkers = 1000, sidelength = 1000):
         while w.num_steps() <= N and walking:    # while not desired N and don't double back
             walking = w.step()                   # attempt a step
         wpositions[i].append([w.xhist, w.yhist]) # append the x and y histories
-        if w.num_steps() == N:                   # if we reached the number of N desired, increment successes
+        if w.num_steps() >= N:                   # if we reached the number of N desired, increment successes
             success += 1
         else:                                    # else increment failures
             fail += 1
@@ -151,7 +149,7 @@ def FindingN():
     successrate = []
 
     for N in Nvals:
-        srate, wpos = SAW(N = N, numwalkers = 100, sidelength = 500)
+        srate, wpos = SAW(N = N, numwalkers = 100, sidelength = 2000)
         successrate.append(srate)
     
     pylab.plot(Nvals, successrate)
@@ -159,3 +157,7 @@ def FindingN():
     pylab.xlabel("N value")
     pylab.ylabel("Success Rate")
     pylab.show()
+
+
+if __name__ == "__main__":
+    FindingN()
