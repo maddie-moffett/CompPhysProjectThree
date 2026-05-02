@@ -128,35 +128,34 @@ class Walker:
         return (self._x**2 + self._y**2)
 
 
-def SAW(N = 100, numwalkers = 1000, sidelength = 1000):
-    wpositions = []        # array to store the x and y positons of each walker to model
+def SAW(N = 25, numwalkers = 1000, sidelength = 1000):
+    walkers = []           # array to store the walker objects
     success = 0            # record number of successful walks
     fail = 0               # record number of failed walks
 
     for i in range(numwalkers):                  # iterate through number of walkers
-        wpositions.append([])                    # new array in positions to store the x and y arrays for this walker
         w = Walker(sidelength)                   # initialize walker
         walking = w.step()                       # take the initial step upwards
         while w.num_steps() <= N and walking:    # while not desired N and don't double back
             walking = w.step()                   # attempt a step
-        wpositions[i].append([w.xhist, w.yhist]) # append the x and y histories
+        walkers.append(w)                        # append the current walker object
         if w.num_steps() >= N:                   # if we reached the number of N desired, increment successes
             success += 1
         else:                                    # else increment failures
             fail += 1
     
-    successrate = success / (success + fail)
-    return successrate, wpositions
+    successrate = success / (success + fail)     # calculate success rate
+    return successrate, walkers                  # return success rate and positions
 
 def FindingN():
-    Nvals = [i for i in range(1, 55, 5)]
+    Nvals = [i for i in range(1, 55, 5)] # N values to be tested
     successrate = []
 
-    for N in Nvals:
-        srate, wpos = SAW(N = N, numwalkers = 1000, sidelength = 1000)
-        successrate.append(srate)
+    for N in Nvals:                      # iterate through n vals to calculate the srate
+        srate, _ = SAW(N = N, numwalkers = 1000, sidelength = 1000)
+        successrate.append(srate)        # record
     
-    pylab.plot(Nvals, successrate)
+    pylab.plot(Nvals, successrate)       # plot
     pylab.plot([0,50], [.1, .1], "-k", label = "10% Success Rate")
     pylab.title("Success Rate as a Function of N")
     pylab.xlabel("N value")
