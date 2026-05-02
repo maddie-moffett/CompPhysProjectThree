@@ -166,3 +166,17 @@ def SAW(N = 25, numwalkers = 1000, sidelength = 1000):
 
 def FindWeightedMeanR2():
     Nvals = [4, 8, 16, 32]
+    msrs = []
+
+    for N in Nvals:
+        msr, _ = SAW(N = N, sidelength = 100)
+        msrs.append(msr)
+    
+    pylab.plot(Nvals, msrs)
+    pylab.title("Mean Squared R as a Function of N")
+    pylab.xlabel("N value")
+    pylab.ylabel("Mean Squared R")
+    pylab.show()
+
+if __name__ == "__main__":
+    FindWeightedMeanR2()
