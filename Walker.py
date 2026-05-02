@@ -175,6 +175,7 @@ def MeanSquaredRforN():
             if w.num_steps() >= N:       # if the walker object was successful
                 sumi += w.get_r2()       # increment sum w this r squared val
                 tot += 1                 # increment the total number of successful
+            print("tot: " + str(tot) + " N = " + str(N))
         meanr2s.append(sumi/tot)         # append this mean to this running list
     
     pylab.plot(Nvals, meanr2s)           # plot label and show

@@ -109,12 +109,15 @@ class Walker:
         elif self._facing == West:
             self._spinlist = [South, West, North, East]
     
+    def _availablesteps(self):
+        for possi in 
+    
     def step(self):
         if self._last is None:
             self._move("up")
             return True
         else:
-            rval = int((random() * 3) // 1)                     # generate random integer 0, 1, or 2
+            rval = int((random() * 3) // 1) + 1                 # generate random integer 1, 2, or 3
             relativemove = ["left", "up", "right"][rval]        # convert to the move relative to the walker's facing
             objectivemove = self._facing.convert_movement(rval) # convert the relative move to an objective move through the plot
             if self.check(objectivemove):                       # if have visited the proposed spot before, terminate
@@ -182,7 +185,3 @@ def MeanSquaredRforN():
     pylab.xlabel("N value")
     pylab.ylabel("Mean Squared R")
     pylab.show()
-
-
-if __name__ == "__main__":
-    MeanSquaredRforN()
