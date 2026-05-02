@@ -115,7 +115,7 @@ class Walker:
         if self._last is None:
             self._up()
         else:
-            rval = int(round((random() * 2) + 1))               # generate random integer 1, 2, or 3
+            rval = int((random() * 3) // 1)                     # generate random integer 0, 1, or 2
             relativemove = ["left", "up", "right"][rval]        # convert to the move relative to the walker's facing
             objectivemove = self._facing.convert_movement(rval) # convert the relative move to an objective move through the plot
             if self.check(objectivemove):                       # if have visited the proposed spot before, terminate
@@ -138,7 +138,7 @@ def SAW(N = 100, numwalkers = 1000, sidelength = 1000):
         while w.num_steps() <= N and walking:    # while not desired N and don't double back
             walking = w.step()                   # attempt a step
         wpositions[i].append([w.xhist, w.yhist]) # append the x and y histories
-        if w.num_steps == N:                     # if we reached the number of N desired, increment successes
+        if w.num_steps() == N:                   # if we reached the number of N desired, increment successes
             success += 1
         else:                                    # else increment failures
             fail += 1
@@ -159,7 +159,3 @@ def FindingN():
     pylab.xlabel("N value")
     pylab.ylabel("Success Rate")
     pylab.show()
-
-
-if __name__ == "__main__":
-    FindingN()
