@@ -145,17 +145,19 @@ def SAW(N = 100, numwalkers = 1000, sidelength = 1000):
     return successrate, wpositions
 
 def FindingN():
-    Nvals = [i for i in range(1, 505, 5)]
+    Nvals = [i for i in range(1, 55, 5)]
     successrate = []
 
     for N in Nvals:
-        srate, wpos = SAW(N = N, numwalkers = 100, sidelength = 2000)
+        srate, wpos = SAW(N = N, numwalkers = 1000, sidelength = 1000)
         successrate.append(srate)
     
     pylab.plot(Nvals, successrate)
-    pylab.title("Successrate as a function of N")
+    pylab.plot([0,50], [.05, .05], "-k", label = "5% Success Rate")
+    pylab.title("Success Rate as a function of N")
     pylab.xlabel("N value")
     pylab.ylabel("Success Rate")
+    pylab.legend()
     pylab.show()
 
 
