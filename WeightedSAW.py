@@ -146,7 +146,7 @@ class Walker:
 
 
 def SAW(N = 25, numwalkers = 1000):
-    sidelength = N*2 + 2
+    sidelength = N*2 + 10
     walkers = []           # array to store the walker objects
     numer = 0              # record numerator sum
     denomer = 0            # record denominator sum
