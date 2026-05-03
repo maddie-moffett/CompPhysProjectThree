@@ -12,7 +12,7 @@ def animate(N, fname, weighted):
     ts = [i for i in range(N)]
     sidelength = N*2 + 2
     if weighted:
-        w = WeightedSAW(sidelength)
+        w = WeightedSAW.Walker(sidelength)
     else:
         w = UNweightedSAW.Walker(sidelength)
     xs = [0]
