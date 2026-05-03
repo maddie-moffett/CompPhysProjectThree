@@ -129,7 +129,7 @@ class Walker:
 
 
 def SAW(N = 25, numwalkers = 1000):
-    sidelength = N*2 + 10
+    sidelength = N*2 + 2
     walkers = []           # array to store the walker objects
     success = 0            # record number of successful walks
     fail = 0               # record number of failed walks
