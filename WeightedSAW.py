@@ -145,12 +145,13 @@ class Walker:
         return self._weight
 
 
-def SAW(N = 25, numwalkers = 1000, sidelength = 50):
+def SAW(N = 25, numwalkers = 1000):
+    sidelength = N*2 + 2
     walkers = []           # array to store the walker objects
     numer = 0              # record numerator sum
     denomer = 0            # record denominator sum
 
-    for i in range(numwalkers):                  # iterate through number of walkers
+    for _ in range(numwalkers):                  # iterate through number of walkers
         w = Walker(sidelength)                   # initialize walker
         walking = w.step()                       # take the initial step upwards
         while w.num_steps() <= N and walking:    # while not desired N and don't double back
@@ -167,7 +168,7 @@ def FindWeightedMeanR2():
     msrs = []                                        # empty array to store the mean squared r vals
 
     for N in Nvals:                                  # iterate through the n vals we're testing
-        msr, _ = SAW(N = N, sidelength = 70)         # calculate SAW
+        msr, _ = SAW(N = N)                          # calculate SAW
         msrs.append(msr)                             # store it
     
     pylab.plot(Nvals, msrs)                          # plot, label, and show

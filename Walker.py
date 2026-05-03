@@ -128,7 +128,8 @@ class Walker:
         return (self._x**2 + self._y**2)
 
 
-def SAW(N = 25, numwalkers = 1000, sidelength = 60):
+def SAW(N = 25, numwalkers = 1000):
+    sidelength = N*2 + 2
     walkers = []           # array to store the walker objects
     success = 0            # record number of successful walks
     fail = 0               # record number of failed walks
@@ -152,7 +153,7 @@ def FindingN():
     successrate = []
 
     for N in Nvals:                      # iterate through n vals to calculate the srate
-        srate, _ = SAW(N = N, numwalkers = 1000, sidelength = 110)
+        srate, _ = SAW(N = N, numwalkers = 1000)
         successrate.append(srate)        # record
     
     pylab.plot(Nvals, successrate)       # plot
@@ -164,20 +165,20 @@ def FindingN():
     pylab.show()
 
 def MeanSquaredRforN():
-    Nvals = [i for i in range(1, 26, 1)] # N values to be tested
-    meanr2s = []                         # storage list for the mean squared rs
+    Nvals = [i for i in range(1, 26, 1)]      # N values to be tested
+    meanr2s = []                              # storage list for the mean squared rs
 
-    for N in Nvals:                      # iterate through the nvals
-        sumi = 0                         # sum starts at 0
-        tot = 0                          # number of successful ws start at 0
-        _, ws = SAW(N = N, numwalkers = 1000, sidelength = 60) # collect the walker objects
-        for w in ws:                     # iterate through walker objects
-            if w.num_steps() >= N:       # if the walker object was successful
-                sumi += w.get_r2()       # increment sum w this r squared val
-                tot += 1                 # increment the total number of successful
-        meanr2s.append(sumi/tot)         # append this mean to this running list
+    for N in Nvals:                           # iterate through the nvals
+        sumi = 0                              # sum starts at 0
+        tot = 0                               # number of successful ws start at 0
+        _, ws = SAW(N = N, numwalkers = 1000) # collect the walker objects
+        for w in ws:                          # iterate through walker objects
+            if w.num_steps() >= N:            # if the walker object was successful
+                sumi += w.get_r2()            # increment sum w this r squared val
+                tot += 1                      # increment the total number of successful
+        meanr2s.append(sumi/tot)              # append this mean to this running list
     
-    pylab.plot(Nvals, meanr2s)           # plot label and show
+    pylab.plot(Nvals, meanr2s)                # plot label and show
     pylab.title("Mean Squared R as a Function of N")
     pylab.xlabel("N value")
     pylab.ylabel("Mean Squared R")
