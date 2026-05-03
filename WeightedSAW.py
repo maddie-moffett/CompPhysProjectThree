@@ -121,7 +121,7 @@ class Walker:
         return avimoves
     
     def step(self):
-        if self._last is None:
+        if self._last is None:                                  # first step is up
             self._move("up")
             return True
         else:
@@ -135,13 +135,13 @@ class Walker:
             self._spin(rval)                                    # change direction facing
             return True
     
-    def _r2(self):
+    def _r2(self):                       # return r^2 at current position
         return (self._x**2 + self._y**2)
     
-    def get_r2_numer(self):
+    def get_r2_numer(self):              # return the numerator to calculate msr for this walker position (weight * r^2)
         return self._weight*self._r2()
     
-    def get_weight(self):
+    def get_weight(self):                # return weight
         return self._weight
 
 
@@ -163,18 +163,15 @@ def SAW(N = 25, numwalkers = 1000, sidelength = 50):
     return meansquaredr, walkers                 # return meansquared r and walker objects
 
 def FindWeightedMeanR2():
-    Nvals = [4, 8, 16, 32]
-    msrs = []
+    Nvals = [4, 8, 16, 32]                           # N vals to be tested
+    msrs = []                                        # empty array to store the mean squared r vals
 
-    for N in Nvals:
-        msr, _ = SAW(N = N, sidelength = 70)
-        msrs.append(msr)
+    for N in Nvals:                                  # iterate through the n vals we're testing
+        msr, _ = SAW(N = N, sidelength = 70)         # calculate SAW
+        msrs.append(msr)                             # store it
     
-    pylab.plot(Nvals, msrs)
+    pylab.plot(Nvals, msrs)                          # plot, label, and show
     pylab.title("Mean Squared R as a Function of N")
     pylab.xlabel("N value")
     pylab.ylabel("Mean Squared R")
     pylab.show()
-
-if __name__ == "__main__":
-    FindWeightedMeanR2()

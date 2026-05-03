@@ -182,7 +182,3 @@ def MeanSquaredRforN():
     pylab.xlabel("N value")
     pylab.ylabel("Mean Squared R")
     pylab.show()
-
-
-if __name__ == "__main__":
-    MeanSquaredRforN()
