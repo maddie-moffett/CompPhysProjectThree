@@ -113,29 +113,27 @@ class Walker:
     
     def _availablesteps(self):
         avimoves = []                  # available
-        for possi in self._movelist:
-            if self.check(possi):
+        for possi in range(len(self._movelist)):
+            if not self.check(self._facing.convert_movement(possi)):
                 avimoves.append(possi)
-        weight = ((len(possi)) / 3)
-        self._weight*weight
-        return weight, avimoves
+        weight = ((len(avimoves)) / 3)
+        self._weight *= weight
+        return avimoves
     
     def step(self):
         if self._last is None:
             self._move("up")
             return True
         else:
-            weight, avimoves = self._availablesteps()           # weighted adjustment
-            rval = int((random() * len(avimoves)) // 1)         # generate random integer 1, 2, or 3
-            relativemove = avimoves[rval*weight]                # find the relative move
-            nval = ["left", "up", "right"][rval].index(relativemove) # find the index of the relative move
-            objectivemove = self._facing.convert_movement(nval) # convert the relative move to an objective move through the plot
-            if self.check(objectivemove):                       # if have visited the proposed spot before, terminate
+            avimoves = self._availablesteps()                   # weighted adjustment
+            if len(avimoves) == 0:
                 return False
-            else:                                               # else take the step
-                self._move(objectivemove)                       # move location
-                self._spin(rval)                                # change direction facing
-                return True
+            rval = int((random() * len(avimoves)) // 1)         # generate random integer 1, 2, or 3
+            nval = avimoves[rval]
+            objectivemove = self._facing.convert_movement(nval) # convert the relative move to an objective move through the plot                                              # else take the step
+            self._move(objectivemove)                           # move location
+            self._spin(rval)                                    # change direction facing
+            return True
     
     def _r2(self):
         return (self._x**2 + self._y**2)
@@ -169,7 +167,7 @@ def FindWeightedMeanR2():
     msrs = []
 
     for N in Nvals:
-        msr, _ = SAW(N = N, sidelength = 100)
+        msr, _ = SAW(N = N, sidelength = 70)
         msrs.append(msr)
     
     pylab.plot(Nvals, msrs)
