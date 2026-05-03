@@ -43,6 +43,6 @@ if __name__ == "__main__":
     Ns = [n for n in range(10, 30, 5)]
     fiuw = ["N" + str(s) + "-uw" for s in Ns]
     fiw = ["N" + str(s) + "-w" for s in Ns]
-    for N in Ns:
-        animate(N, fiuw, weighted = False)
-        animate(N, fiw, weighted = True)
+    for i in range(len(Ns)):
+        animate(Ns[i], fiuw[i], weighted = False)
+        animate(Ns[i], fiw[i], weighted = True)
